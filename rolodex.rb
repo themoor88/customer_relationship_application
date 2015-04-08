@@ -1,12 +1,29 @@
 class Rolodex
+  attr_reader :contacts
   def initialize
     @contacts = []
-    @id = 0
+    @id = 1
   end
 
   def find(contact_id)
     @contacts.find do |contact|
       contact.id == contact_id
+    end
+  end
+
+  def search(query)
+    if query == "first name"
+    @contacts.select do |contact|
+      contact.first_name == first_name
+    elsif query == "first name"
+    @contacts.select do |contact|
+      contact.first_name == first_name
+    elsif query == "first name"
+    @contacts.select do |contact|
+      contact.first_name == first_name
+    elsif query == "first name"
+    @contacts.select do |contact|
+      contact.first_name == first_name
     end
   end
 
@@ -16,12 +33,18 @@ class Rolodex
     @id += 1
   end
 
-  def modify_contact(attribute)
-    @contacts.map {|c| c.send(attribute)}
-  end
-
-  def display_all_contacts
-    @contacts
+  def modify_contact(contact, attribute, new_attribute)
+    if attribute == "first name"
+      contact.first_name = new_attribute
+    elsif attribute == "last name"
+      contact.last_name = new_attribute
+    elsif attribute == "email"
+      contact.email = new_attribute
+    elsif attribute == "notes"
+      contact.notes = new_attribute
+    else
+      puts "That is an invalid attribute."
+    end
   end
 
   def delete_contact(contact_id)

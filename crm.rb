@@ -1,5 +1,6 @@
 require_relative 'contact'
 require_relative 'rolodex'
+require 'faker'
 
 class CRM
   def self.run
@@ -9,6 +10,9 @@ class CRM
 
   def initialize
     @rolodex = Rolodex.new
+    100.times do
+      @rolodex.store_new_contact(Contact.new(Faker::Name.first_name, Faker::Name.last_name, Faker::Internet.email, Faker::Hacker.say_something_smart))
+    end
   end
 
   def main_menu
@@ -54,20 +58,19 @@ class CRM
   end
 
   def modify
-    puts ""
     print "Enter the id of the user you would like to modify:"
     contact_id = gets.chomp.to_i
     contact = @rolodex.find(contact_id)
     puts contact
-    puts "Is this the user?"
+    puts "Is this the user? Yes or no?"
     answer = gets.chomp.downcase
     if answer == "yes"
-      puts "Would you like to change firstname, lastname, email or notes."
-      attribute = gets.chomp
-      display_attribute = @rolodex.modify_contact(attribute)
-      puts display_attribute
-    else answer == "no"
-      main_menu
+      puts "Would you like to change First Name, Last Name, Email or Notes?"
+      attribute =  gets.chomp.downcase
+      puts "What would you like to change the #{attribute} to?"
+      new_attribute = gets.chomp.downcase
+      @rolodex.modify_contact(contact, attribute, new_attribute)
+      puts "Here is the new contact: #{contact}"
     end
   end
 
@@ -76,7 +79,7 @@ class CRM
     contact_id = gets.chomp.to_i
     contact = @rolodex.find(contact_id)
     puts contact
-    puts "Is this the user?"
+    puts "Is this the user? Yes or no?"
     answer = gets.chomp.downcase
     if answer == "yes"
       @rolodex.delete_contact(contact_id)
@@ -94,9 +97,7 @@ class CRM
   end
 
   def display_all
-    puts ""
-    puts @rolodex.display_all_contacts
-    puts ""
+   puts @rolodex.contacts
   end
 
   def display_attribute
